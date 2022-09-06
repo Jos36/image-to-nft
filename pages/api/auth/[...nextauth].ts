@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";
+import axios from "axios";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -73,10 +74,24 @@ export default async function auth(req: any, res: any) {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
       async session({ session, token }) {
+        console.log("token:", token);
+        console.log("session:", session);
         session.address = token.sub;
+
         if (session.user) {
+          let reqOptions = {
+            url: `http://localhost:3000/api/user/get?address=${token.sub}`,
+            method: "GET",
+          };
+
+          let response = await axios.request(reqOptions);
+          console.log(response.data);
+
           session.user.name = token.sub;
+          session.user.address = token.sub;
           session.user.image = "https://www.fillmurray.com/128/128";
+          session.user.test = "https://www.fillmurray.com/128/128";
+          session.user.role = "USER";
         }
         return session;
       },

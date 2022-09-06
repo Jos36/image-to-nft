@@ -6,10 +6,9 @@ import type {
 } from "next";
 import { getToken } from "next-auth/jwt";
 import { getSession } from "next-auth/react";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import HomeComponent from "../components/Home";
-import { Context } from "../context/context";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -31,10 +30,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  if (session?.user.role === "ADMIN") {
+  if (session?.user.role === "USER") {
     return {
       redirect: {
-        destination: "/admin",
+        destination: "/",
         permanent: false,
       },
     };
@@ -52,16 +51,13 @@ type AuthenticatedPageProps = InferGetServerSidePropsType<
   typeof getServerSideProps
 >;
 
-const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
-  const store = useContext(Context);
+const Home: NextPage = ({ address }: AuthenticatedPageProps) => {
   const router = useRouter();
 
   useEffect(() => {
     if (!address) {
       router.push("/login");
     }
-
-    store.setUser(session);
   }, []);
 
   console.log(address);

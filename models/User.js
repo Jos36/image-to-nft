@@ -6,6 +6,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: "{PATH} is required!",
     },
+    address: {
+      type: String,
+      required: "{PATH} is required!",
+    },
     bio: {
       type: String,
     },

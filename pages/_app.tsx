@@ -10,6 +10,7 @@ import {
   RainbowKitSiweNextAuthProvider,
   GetSiweMessageOptions,
 } from "@rainbow-me/rainbowkit-siwe-next-auth";
+import { ContextProvider } from "../context/context";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -55,7 +56,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         // getSiweMessageOptions={getSiweMessageOptions}
         >
           <RainbowKitProvider chains={chains}>
-            <Component {...pageProps} />
+            <ContextProvider>
+              <Component {...pageProps} />
+            </ContextProvider>
           </RainbowKitProvider>
         </RainbowKitSiweNextAuthProvider>
       </SessionProvider>

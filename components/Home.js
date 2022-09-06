@@ -1,6 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../context/context";
+
+const imgs = [
+  "/test/1.jpg",
+  "/test/2.jpg",
+  "/test/3.jpg",
+  "/test/4.jpg",
+  "/test/5.jpg",
+  "/test/1.jpg",
+  "/test/2.jpg",
+  "/test/3.jpg",
+  "/test/4.jpg",
+  "/test/5.jpg",
+  "/test/1.jpg",
+  "/test/2.jpg",
+  "/test/3.jpg",
+  "/test/4.jpg",
+  "/test/5.jpg",
+  "/test/1.jpg",
+  "/test/2.jpg",
+  "/test/3.jpg",
+  "/test/4.jpg",
+  "/test/5.jpg",
+];
 
 function HomeComponent() {
+  const store = useContext(Context);
+
+  const handleClick = (t) => {
+    console.log(t);
+  };
+
   return (
     <div className="flex justify-center mt-28">
       <form
@@ -9,15 +39,17 @@ function HomeComponent() {
           e.preventDefault();
 
           let formData = new FormData(e.currentTarget);
-          formData.append("key1", "value1");
-          formData.append("key2", "value2");
+          formData.append("address", store.user.address);
+
           for (var pair of formData.entries()) {
             console.log(pair[0] + ", " + pair[1]);
           }
 
-          let response = await fetch("localhost:3000/api/user/create", {
+          let response = await fetch("http://localhost:3000/api/user/create", {
             method: "POST",
             body: formData,
+          }).catch((e) => {
+            console.log(e);
           });
 
           let data = await response.text();
@@ -25,15 +57,10 @@ function HomeComponent() {
         }}
       >
         <div className="mb-6">
-          <label
-            for="email"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            Your email
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+            Your Name
           </label>
           <input
-            type="email"
-            id="email"
             name="name"
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             placeholder="name@flowbite.com"
@@ -41,30 +68,20 @@ function HomeComponent() {
           />
         </div>
         <div className="mb-6">
-          <label
-            for="password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            Your password
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+            Your bio
           </label>
           <input
-            type="password"
-            id="password"
             name="bio"
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             required
           />
         </div>
         <div className="mb-6">
-          <label
-            for="repeat-password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            Repeat password
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+            Profile image
           </label>
           <input
-            type="password"
-            id="repeat-password"
             name="image"
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             required
@@ -84,7 +101,7 @@ function HomeComponent() {
             for="terms"
             className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            I agree with the{" "}
+            I agree with the
             <a
               href="#"
               className="text-blue-600 hover:underline dark:text-blue-500"
@@ -97,7 +114,7 @@ function HomeComponent() {
           type="submit"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Register new account
+          Compelete my account
         </button>
       </form>
     </div>
@@ -105,3 +122,22 @@ function HomeComponent() {
 }
 
 export default HomeComponent;
+// <div className="flex justify-center">
+//   <div className="w-[80vw] flex flex-wrap  gap-x-4 gap-y-4 ">
+//     {imgs.map((t) => (
+//       <div
+//         className="h-96 flex-grow-[1] "
+//         onClick={() => {
+//           handleClick(t);
+//         }}
+//       >
+//         <img
+//           key={t}
+//           src={t}
+//           alt=""
+//           className="w-full h-full object-cover   "
+//         />
+//       </div>
+//     ))}
+//   </div>
+// </div>

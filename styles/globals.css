@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --p: #000000;
-  --s: #ffffff;
-}
-
 html,
 body {
   padding: 0;

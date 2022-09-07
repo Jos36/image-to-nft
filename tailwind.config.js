@@ -16,5 +16,5 @@ module.exports = {
       s: "#ffffff",
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };

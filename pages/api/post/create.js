@@ -2,6 +2,7 @@ import connectMongodb from "../../../utils/connectMongodb";
 import Post from "../../../models/Post";
 import nextConnect from "next-connect";
 import multer from "multer";
+import { getToken } from "next-auth/jwt";
 
 const apiRoute = nextConnect({
   onError(error, req, res) {
@@ -20,16 +21,25 @@ apiRoute.post(async (req, res) => {
   console.log(req.files); // Your files here
   console.log(req.body); // Your form data here
 
-  console.log("Connecting db ...");
-  await connectMongodb();
+  const token = await getToken({ req });
 
-  const post = await Post.create({
-    user: req.body.user,
-    bio: req.body.description,
-    image: req.body.image,
-  });
+  if (token) {
+    if (token.sub) {
+      console.log("Connecting db ...");
+      await connectMongodb();
 
-  res.status(200).json({ post });
+      // const post = await Post.create({
+      //   image: req.body.image,
+      //   description: req.body.description,
+      //   user: req.body.user,
+      //   top:0
+      // });
+
+      res.status(200).json({ post: "post" });
+    }
+  } else {
+    res.status(401).json({ success: false });
+  }
 });
 
 export default apiRoute;

@@ -12,6 +12,9 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: "{PATH} is required!",
     },
+    top: {
+      type: String,
+    },
   },
   {
     timestamps: true,

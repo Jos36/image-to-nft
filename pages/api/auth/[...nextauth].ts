@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";
@@ -65,7 +65,7 @@ export default async function auth(req: any, res: any) {
     providers.pop();
   }
 
-  return await NextAuth(req, res, {
+  const authOptions: NextAuthOptions = {
     // https://next-auth.js.org/configuration/providers/oauth
     providers,
     session: {
@@ -96,5 +96,6 @@ export default async function auth(req: any, res: any) {
         return session;
       },
     },
-  });
+  };
+  return await NextAuth(req, res, authOptions);
 }

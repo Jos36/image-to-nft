@@ -66,7 +66,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
 
   console.log(address);
   return (
-    <div>
+    <div className="h-fit pb-16 bg-white">
       <nav className="bg-p text-s text-lg font-semibold flex items-center p-5 justify-between shadow-lg ">
         <div className="ml-10">
           <button>Home</button>
@@ -75,14 +75,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
           <ConnectButton />
         </div>
       </nav>
-      {address ? (
-        <div>
-          <h1>Authenticated as {address}</h1>
-          <HomeComponent />
-        </div>
-      ) : (
-        <h1>Unauthenticated</h1>
-      )}
+      {address ? <HomeComponent /> : <h1>Unauthenticated</h1>}
     </div>
   );
 };

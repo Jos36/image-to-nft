@@ -83,16 +83,19 @@ export default async function auth(req: any, res: any) {
             url: `http://localhost:3000/api/user/get?address=${token.sub}`,
             method: "GET",
           };
-
+          let admins = process.env.ADMIN_ADDRESSES?.split(",");
           let response = await axios.request(reqOptions);
           console.log(response.data);
 
           session.user.name = token.sub;
           session.user.address = token.sub;
           session.user.image = "https://www.fillmurray.com/128/128";
-          session.user.test = "https://www.fillmurray.com/128/128";
           session.user.role = "USER";
+
+          if (admins?.includes(token.sub as string))
+            session.user.role = "ADMIN";
         }
+
         return session;
       },
     },

@@ -13,6 +13,12 @@ const PostSchema = new mongoose.Schema(
       required: "{PATH} is required!",
     },
     top: {
+      type: Number,
+    },
+    title: {
+      type: String,
+    },
+    chain: {
       type: String,
     },
   },

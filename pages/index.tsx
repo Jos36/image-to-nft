@@ -9,6 +9,7 @@ import { getSession } from "next-auth/react";
 import { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import HomeComponent from "../components/Home";
+import Navbar from "../components/Navbar";
 import { Context } from "../context/context";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -67,17 +68,9 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
   console.log(address);
   return (
     <div className="h-fit pb-16 bg-white">
-      <nav className="bg-p text-s text-lg font-semibold flex items-center p-5 justify-between shadow-lg ">
-        <div className="ml-10">
-          <button>Home</button>
-        </div>
-        <div>
-          <ConnectButton />
-        </div>
-      </nav>
+      <Navbar />
       {address ? <HomeComponent /> : <h1>Unauthenticated</h1>}
     </div>
   );
 };
-
 export default Home;

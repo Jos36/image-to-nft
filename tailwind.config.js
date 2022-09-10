@@ -16,5 +16,5 @@ module.exports = {
       s: "#ffffff",
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [require("tailwind-scrollbar"), require("daisyui")],
 };

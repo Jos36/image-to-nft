@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 
 export const defaultContext = {
-  user: null,
+  user: {},
   setUser: (data) => {},
 };
 

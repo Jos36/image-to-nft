@@ -35,37 +35,12 @@ apiRoute.post(async (req, res) => {
         console.log("Connecting db ...");
         await connectMongodb();
 
-        Post.find({ top: req.body.top }).then(async (resp) => {
-          if (resp.length === 0) {
-            await Post.findOneAndUpdate(
-              { _id: req.body._id },
-              { top: Number(req.body.top) },
-              { new: true }
-            ).then((postWithTop) => {
-              res.status(200).json({ post: postWithTop });
-              console.log("Updated!");
-            });
-          } else {
-            await Post.findOneAndUpdate(
-              { top: req.body.top },
-              { top: 0 },
-              { new: true }
-            )
-              .then((postWithTop) => {
-                console.log("Updated!");
-              })
-              .then(async () => {
-                await Post.findOneAndUpdate(
-                  { _id: req.body._id },
-                  { top: Number(req.body.top) },
-                  { new: true }
-                ).then((postWithTop) => {
-                  res.status(200).json({ post: postWithTop });
-                  console.log("Updated!");
-                });
-              });
+        await Post.findOneAndDelete({ _id: req.body._id }).then(
+          (postWithTop) => {
+            res.status(200).json({ post: postWithTop });
+            console.log("Updated!");
           }
-        });
+        );
       } else {
         res.status(401).json({ success: false });
       }

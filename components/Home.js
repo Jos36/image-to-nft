@@ -362,7 +362,7 @@ function HomeComponent() {
                 <div role="status ">
                   <svg
                     aria-hidden="true"
-                    class="mr-2 w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                    className="mr-2 w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                     viewBox="0 0 100 101"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -376,7 +376,7 @@ function HomeComponent() {
                       fill="currentFill"
                     />
                   </svg>
-                  <span class="sr-only">Loading...</span>
+                  <span className="sr-only">Loading...</span>
                 </div>
               </div>
             )}
@@ -397,6 +397,7 @@ function HomeComponent() {
               <div className="w-fit flex gap-x-4 p-10 ">
                 {topPosts.map((t) => (
                   <div
+                    key={t.image}
                     className="h-[50vh] w-80 rounded-xl overflow-hidden transition-all hover:scale-105"
                     onClick={() => {
                       handleClick(t);
@@ -450,6 +451,7 @@ function HomeComponent() {
           <div className="w-[90vw] flex flex-wrap  gap-x-4 gap-y-4 ">
             {posts.map((p) => (
               <div
+                key={p.image}
                 className="h-[55vh] flex-grow-[1] rounded-xl overflow-hidden transition-all hover:scale-105"
                 onClick={() => {
                   handleClick(p);
@@ -497,7 +499,7 @@ function HomeComponent() {
         <div role="status" className="w-screen h-screen flex justify-center ">
           <svg
             aria-hidden="true"
-            class="mr-2 w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-black"
+            className="mr-2 w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-black"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -511,7 +513,7 @@ function HomeComponent() {
               fill="currentFill"
             />
           </svg>
-          <span class="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span>
         </div>
       )}
     </div>

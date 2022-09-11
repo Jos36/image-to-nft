@@ -234,7 +234,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
                             description: string;
                             createdAt: string;
                           }) => (
-                            <tr>
+                            <tr key={p.image}>
                               <td>
                                 <div className="flex items-center space-x-3">
                                   <div className="avatar">

@@ -95,7 +95,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
 
   const getPosts = async () => {
     let reqOptions = {
-      url: `http://localhost:3000/api/post/all`,
+      url: `https://image-to-nft.vercel.app/api/post/all`,
       method: "GET",
     };
 
@@ -106,7 +106,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
 
   const getRankPosts = async () => {
     let reqOptions = {
-      url: `http://localhost:3000/api/post/all?page=${rankPage}`,
+      url: `https://image-to-nft.vercel.app/api/post/all?page=${rankPage}`,
       method: "GET",
     };
 
@@ -128,7 +128,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
     formData.append("top", topValue);
 
     let reqOptions = {
-      url: `http://localhost:3000/api/admin/post/update`,
+      url: `https://image-to-nft.vercel.app/api/admin/post/update`,
       method: "POST",
       data: formData,
     };
@@ -148,7 +148,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
     formData.append("_id", details._id);
 
     let reqOptions = {
-      url: `http://localhost:3000/api/admin/post/delete`,
+      url: `https://image-to-nft.vercel.app/api/admin/post/delete`,
       method: "POST",
       data: formData,
     };

@@ -80,7 +80,7 @@ export default async function auth(req: any, res: any) {
 
         if (session.user) {
           let reqOptions = {
-            url: `http://localhost:3000/api/user/get?address=${token.sub}`,
+            url: `https://image-to-nft.vercel.app/api/user/get?address=${token.sub}`,
             method: "GET",
           };
           let admins = process.env.ADMIN_ADDRESSES?.split(",");

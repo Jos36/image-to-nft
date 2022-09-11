@@ -22,7 +22,7 @@ function HomeComponent() {
 
   const getTopPosts = async () => {
     let reqOptions = {
-      url: `http://localhost:3000/api/post/top`,
+      url: `https://image-to-nft.vercel.app/api/post/top`,
       method: "GET",
     };
 
@@ -33,7 +33,7 @@ function HomeComponent() {
 
   const getPosts = async () => {
     let reqOptions = {
-      url: `http://localhost:3000/api/post/all`,
+      url: `https://image-to-nft.vercel.app/api/post/all`,
       method: "GET",
     };
 
@@ -44,7 +44,7 @@ function HomeComponent() {
 
   const checkUser = async () => {
     let reqOptions = {
-      url: `http://localhost:3000/api/user/get?address=${store.user.address}`,
+      url: `https://image-to-nft.vercel.app/api/user/get?address=${store.user.address}`,
       method: "GET",
     };
 
@@ -90,7 +90,7 @@ function HomeComponent() {
               }
 
               let response = await fetch(
-                "http://localhost:3000/api/user/create",
+                "https://image-to-nft.vercel.app/api/user/create",
                 {
                   method: "POST",
                   body: formData,
@@ -250,7 +250,7 @@ function HomeComponent() {
               }
 
               let response = await fetch(
-                "http://localhost:3000/api/post/create",
+                "https://image-to-nft.vercel.app/api/post/create",
                 {
                   method: "POST",
                   body: formData,

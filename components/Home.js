@@ -14,6 +14,7 @@ function HomeComponent() {
   const inputRef = React.useRef(null);
   const viewRef = React.useRef(null);
   const newUserRef = React.useRef(null);
+  const createFormRef = React.useRef(null);
 
   const handleClick = (p) => {
     setSelectedPost(p);
@@ -22,7 +23,7 @@ function HomeComponent() {
 
   const getTopPosts = async () => {
     let reqOptions = {
-      url: `https://image-to-nft.vercel.app/api/post/top`,
+      url: `/api/post/top`,
       method: "GET",
     };
 
@@ -33,7 +34,7 @@ function HomeComponent() {
 
   const getPosts = async () => {
     let reqOptions = {
-      url: `https://image-to-nft.vercel.app/api/post/all`,
+      url: `/api/post/all`,
       method: "GET",
     };
 
@@ -44,7 +45,7 @@ function HomeComponent() {
 
   const checkUser = async () => {
     let reqOptions = {
-      url: `https://image-to-nft.vercel.app/api/user/get?address=${store.user.address}`,
+      url: `/api/user/get?address=${store.user.address}`,
       method: "GET",
     };
 
@@ -61,6 +62,53 @@ function HomeComponent() {
       getPosts();
     }
   }, [store.user.address]);
+
+  const mintNft = async () => {
+    let minted = false;
+    let url;
+    console.log(chain);
+    console.log(store.user.address);
+    console.log(selectedImage);
+
+    // mint logic
+
+    // after mint logic
+    minted = true;
+    url = "http nft url";
+    return { minted, url };
+  };
+
+  const handleMint = async (e) => {
+    setCreatePostLoading(true);
+
+    let formData = new FormData(createFormRef.current);
+    formData.append("user", store.user.address);
+    formData.append("image", selectedImage);
+    formData.append("chain", chain);
+
+    mintNft().then(async ({ minted, url }) => {
+      if (minted) {
+        formData.append("isMinted", true);
+        formData.append("nftLink", url);
+      }
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + ", " + pair[1]);
+      }
+
+      let response = await fetch("/api/post/create", {
+        method: "POST",
+        body: formData,
+      }).catch((e) => {
+        console.log(e);
+      });
+
+      let data = await response.text();
+      console.log(data);
+      getPosts();
+      inputRef.current.click();
+      setCreatePostLoading(false);
+    });
+  };
 
   return (
     <div className="flex flex-col justify-center mt-12">
@@ -89,13 +137,10 @@ function HomeComponent() {
                 console.log(pair[0] + ", " + pair[1]);
               }
 
-              let response = await fetch(
-                "https://image-to-nft.vercel.app/api/user/create",
-                {
-                  method: "POST",
-                  body: formData,
-                }
-              ).catch((e) => {
+              let response = await fetch("/api/user/create", {
+                method: "POST",
+                body: formData,
+              }).catch((e) => {
                 console.log(e);
               });
 
@@ -170,7 +215,7 @@ function HomeComponent() {
             <div className="overflow-y-scroll h-[70vh] w-[60vw] flex justify-center scrollbar scrollbar-thumb-black scrollbar-track-gray-100">
               <div className="overflow-x-auto w-[95%]">
                 <div className="text-white ">
-                  <div className="flex justify-between  mt-10">
+                  <div className="lg:flex justify-between  mt-10">
                     <div className="flex flex-col ">
                       <div className="space-y-2 mt-10">
                         <span className="flex gap-x-2">
@@ -186,22 +231,32 @@ function HomeComponent() {
                         <span className="flex gap-x-2">
                           <p>Chain: </p> <p>{selectedPost?.chain}</p>
                         </span>
+                        {selectedPost?.isMinted && (
+                          <span className="flex gap-x-2">
+                            <p>Minted: </p>
+                            <p>
+                              {selectedPost?.isMinted && selectedPost?.nftLink}
+                            </p>
+                          </span>
+                        )}
                         <span className="flex gap-x-2">
-                          <p>Date created: </p>{" "}
+                          <p>Date created: </p>
                           <p>{formatDate(selectedPost?.createdAt)}</p>
                         </span>
                       </div>
                     </div>
-                    <div className="flex flex-col justify-between h-[61vh]">
+                    <div className="flex flex-col justify-between h-[61vh] mt-10 lg:mt-0">
                       <div>
                         <span className="flex gap-x-2 w-full justify-center mb-3">
                           <p>Top </p> <p>{selectedPost?.top}</p>
                         </span>
-                        <img
-                          className="w-72 border-2 border-white"
-                          src={selectedPost?.image}
-                          alt=""
-                        />
+                        <div className="flex w-full justify-center ">
+                          <img
+                            className="w-72 border-2 border-white "
+                            src={selectedPost?.image}
+                            alt=""
+                          />
+                        </div>
                       </div>
                       <div className="flex gap-x-4">
                         <button
@@ -235,6 +290,7 @@ function HomeComponent() {
           <div className="divider"></div>
           <form
             className="w-[80vw] lg:w-[40vw] p-5"
+            ref={createFormRef}
             onSubmit={async (e) => {
               e.preventDefault();
 
@@ -249,13 +305,10 @@ function HomeComponent() {
                 console.log(pair[0] + ", " + pair[1]);
               }
 
-              let response = await fetch(
-                "https://image-to-nft.vercel.app/api/post/create",
-                {
-                  method: "POST",
-                  body: formData,
-                }
-              ).catch((e) => {
+              let response = await fetch("/api/post/create", {
+                method: "POST",
+                body: formData,
+              }).catch((e) => {
                 console.log(e);
               });
 
@@ -353,7 +406,15 @@ function HomeComponent() {
                     type="submit"
                     className="text-black bg-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
-                    Done
+                    Save
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleMint();
+                    }}
+                    className="text-black bg-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    Mint
                   </button>
                 </div>
               </div>

@@ -45,6 +45,8 @@ apiRoute.post(async (req, res) => {
           top: 0,
           title: req.body.title,
           chain: req.body.chain,
+          isMinted: req.body.isMinted ? req.body.isMinted : false,
+          nftLink: req.body.nftLink && req.body.nftLink,
         });
 
         const storage = getStorage();

@@ -21,6 +21,12 @@ const PostSchema = new mongoose.Schema(
     chain: {
       type: String,
     },
+    isMinted: {
+      type: Boolean,
+    },
+    nftLink: {
+      type: String,
+    },
   },
   {
     timestamps: true,

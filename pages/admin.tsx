@@ -65,6 +65,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
   const [modalStep, setModalStep] = useState("TABLE");
   const [details, setDetails] = useState({} as Details);
   const store = useContext(Context);
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   type Details = {
     image: string;
@@ -95,7 +96,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
 
   const getPosts = async () => {
     let reqOptions = {
-      url: `https://image-to-nft.vercel.app/api/post/all`,
+      url: `/api/post/all`,
       method: "GET",
     };
 
@@ -106,7 +107,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
 
   const getRankPosts = async () => {
     let reqOptions = {
-      url: `https://image-to-nft.vercel.app/api/post/all?page=${rankPage}`,
+      url: `/api/post/all?page=${rankPage}`,
       method: "GET",
     };
 
@@ -128,7 +129,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
     formData.append("top", topValue);
 
     let reqOptions = {
-      url: `https://image-to-nft.vercel.app/api/admin/post/update`,
+      url: `/api/admin/post/update`,
       method: "POST",
       data: formData,
     };
@@ -148,7 +149,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
     formData.append("_id", details._id);
 
     let reqOptions = {
-      url: `https://image-to-nft.vercel.app/api/admin/post/delete`,
+      url: `/api/admin/post/delete`,
       method: "POST",
       data: formData,
     };
@@ -163,31 +164,72 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
 
   return (
     <div className="h-fit pb-16 bg-white">
-      {/* navbar */}
-      <nav className="bg-p text-s text-lg font-semibold flex items-center p-5 justify-between shadow-md shadow-[#00000071]">
-        <div className="ml-10">
-          <button>Home</button>
-        </div>
-        <div className="flex gap-x-10">
-          <label
-            htmlFor="create-post"
-            className="modal-button flex items-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
-          >
-            Create New Post
-          </label>
-          <label
-            onClick={() => {
-              getRankPosts();
-            }}
-            htmlFor="rank-post"
-            className="modal-button flex items-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
-          >
-            Rank Posts
-          </label>
+      <div>
+        <nav className="bg-p text-s text-lg font-semibold flex items-center p-5 justify-between shadow-md shadow-[#00000071]">
+          <div className="ml-10">
+            <button>Home</button>
+          </div>
+          <div className=" gap-x-10 hidden lg:flex">
+            <label
+              htmlFor="create-post"
+              className="modal-button flex items-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
+            >
+              Create New Post
+            </label>
 
-          <ConnectButton />
-        </div>
-      </nav>
+            <ConnectButton />
+          </div>
+          <div className="lg:hidden">
+            <label
+              onClick={() => {
+                setOpenDrawer(!openDrawer);
+              }}
+              className="drawer-button btn btn-primary"
+            >
+              <div className="flex-none lg:hidden">
+                <label
+                  htmlFor="my-drawer-3"
+                  className="btn btn-square btn-ghost"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    className="inline-block w-6 h-6 stroke-current"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    ></path>
+                  </svg>
+                </label>
+              </div>
+            </label>
+          </div>
+        </nav>
+        {openDrawer && (
+          <div className=" gap-x-10 flex justify-center flex-col bg-black items-center gap-y-10 p-10 lg:hidden">
+            <ConnectButton />
+            <label
+              htmlFor="create-post"
+              className=" modal-button flex items-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
+            >
+              Create New Post
+            </label>
+            <label
+              onClick={() => {
+                getRankPosts();
+              }}
+              htmlFor="rank-post"
+              className="modal-button flex items-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
+            >
+              Rank Posts
+            </label>
+          </div>
+        )}
+      </div>
 
       {/* rank posts modal */}
 
@@ -353,7 +395,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col justify-between h-[61vh]">
+                      <div className="mt-12 lg:mt-0  flex flex-col justify-between h-[61vh]">
                         <div>
                           <span className="flex gap-x-2 w-full justify-center mb-3">
                             <p>Top </p> <p>{details.top}</p>
@@ -393,7 +435,13 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
       </div>
 
       {/* body */}
-      {address ? <HomeComponent /> : <h1>Unauthenticated</h1>}
+      {address ? (
+        <div className="mt-20">
+          <HomeComponent />
+        </div>
+      ) : (
+        <h1>Unauthenticated</h1>
+      )}
     </div>
   );
 };

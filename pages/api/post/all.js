@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   await connectMongodb();
 
   if (req.query.page) {
-    const posts = await Post.find({})
+    const posts = await Post.find({ isMinted: true })
       .sort("-createdAt")
       .skip(req.query.page * 7 - 7)
       .limit(7);

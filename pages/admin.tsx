@@ -176,7 +176,15 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
             >
               Create New Post
             </label>
-
+            <label
+              onClick={() => {
+                getRankPosts();
+              }}
+              htmlFor="rank-post"
+              className=" modal-button flex items-center justify-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
+            >
+              Rank Posts
+            </label>
             <ConnectButton />
           </div>
           <div className="lg:hidden">
@@ -214,7 +222,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
             <ConnectButton />
             <label
               htmlFor="create-post"
-              className=" modal-button flex items-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
+              className="w-72 bg-white text-black modal-button flex items-center justify-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
             >
               Create New Post
             </label>
@@ -223,7 +231,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
                 getRankPosts();
               }}
               htmlFor="rank-post"
-              className="modal-button flex items-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
+              className="w-72 bg-white text-black modal-button flex items-center justify-center cursor-pointer transition-all hover:scale-105 hover:bg-white hover:text-black p-2 rounded-lg"
             >
               Rank Posts
             </label>

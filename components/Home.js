@@ -82,9 +82,8 @@ function HomeComponent() {
   const mintNftNow = async () => {
     let minted = false;
     let url;
-    console.log(chain);
-    console.log(store.user.address);
-    console.log(selectedImage);
+    const { user, image, chain } = selectedPost;
+    console.log(selectedPost);
 
     // mint logic
 

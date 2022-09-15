@@ -50,9 +50,10 @@ apiRoute.post(async (req, res) => {
         });
 
         const storage = getStorage();
-        const ImageType = req.files[0].mimetype;
-        const type = ImageType.split("/");
-        const imageRef = ref(storage, `posts/${post._id}/image.${type[1]}`);
+        // const ImageType = req.files[0].mimetype;
+        // const type = ImageType.split("/");
+        // const imageRef = ref(storage, `posts/${post._id}/image.${type[1]}`);
+        const imageRef = ref(storage, `posts/${post._id}/image.png`);
         await uploadBytes(imageRef, req.files[0].buffer).then(
           async (snapshot) => {
             const downloadURL = await getDownloadURL(imageRef);

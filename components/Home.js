@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../context/context";
 import { formatDate, isCurrentWeek } from "../utils/formatDate";
+import { NFTStorage, File, Blob } from "nft.storage";
 
 function HomeComponent() {
   const store = useContext(Context);
@@ -64,33 +65,71 @@ function HomeComponent() {
     }
   }, [store.user.address]);
 
-  const mintNft = async () => {
+  const mintNft = async (formData) => {
+    const client = new NFTStorage({
+      token: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY,
+    });
     let minted = false;
     let url;
-    console.log(chain);
-    console.log(store.user.address);
-    console.log(selectedImage);
+    const imageFile = new File([selectedImage], "nft.png", {
+      type: "image/png",
+    });
 
-    // mint logic
+    await client
+      .store({
+        name: formData.get("title"),
+        description: formData.get("description"),
+        image: imageFile,
+      })
+      .then((metadata) => {
+        console.log(metadata);
+        console.log(chain);
+        console.log(store.user.address);
+        console.log(selectedImage);
+        // after mint logic
+        minted = true;
+        url = metadata.url; //replace this
+      });
 
-    // after mint logic
-    minted = true;
-    url = "http nft url";
     return { minted, url };
   };
 
   const mintNftNow = async () => {
     let minted = false;
     let url;
-    const { user, image, chain } = selectedPost;
-    console.log(selectedPost);
+    const { user, image, chain, title, description } = selectedPost;
+    const client = new NFTStorage({
+      token: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY,
+    });
 
-    // mint logic
+    try {
+      const res = fetch(image)
+        .then((response) => response.blob())
+        .then(async (imageBlob) => {
+          const res = await client
+            .store({
+              name: title,
+              description: description,
+              image: new Blob([imageBlob]),
+            })
+            .then((metadata) => {
+              console.log(metadata);
+              console.log(chain);
+              console.log(store.user.address);
+              console.log(selectedImage);
 
-    // after mint logic
-    minted = true;
-    url = "http nft url";
-    return { minted, url };
+              // after mint logic
+              minted = true;
+              url = metadata.url; //replace this
+              return { minted, url };
+            });
+          return res;
+        });
+      return res;
+      // after mint logic
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleMintNow = async () => {
@@ -123,7 +162,7 @@ function HomeComponent() {
     formData.append("image", selectedImage);
     formData.append("chain", chain);
 
-    mintNft().then(async ({ minted, url }) => {
+    mintNft(formData).then(async ({ minted, url }) => {
       if (minted) {
         formData.append("isMinted", true);
         formData.append("nftLink", url);

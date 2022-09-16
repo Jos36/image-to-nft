@@ -67,7 +67,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
 
   console.log(address);
   return (
-    <div className="h-fit pb-16 bg-white">
+    <div className="h-fit pb-16 bg-white min-h-screen">
       <Navbar />
       {address ? <HomeComponent /> : <h1>Unauthenticated</h1>}
     </div>

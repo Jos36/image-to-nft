@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const AutoIncrement = require("mongoose-sequence")(mongoose);
+
 const PostSchema = new mongoose.Schema(
   {
     image: {
@@ -32,8 +34,12 @@ const PostSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-const Post = mongoose.models.Post
-  ? mongoose.models.Post
-  : mongoose.model("Post", PostSchema);
 
-module.exports = Post;
+if (mongoose.models.Post) {
+  const Post = mongoose.models.Post;
+  module.exports = Post;
+} else {
+  PostSchema.plugin(AutoIncrement, { inc_field: "nft_id" });
+  const Post = mongoose.model("Post", PostSchema);
+  module.exports = Post;
+}

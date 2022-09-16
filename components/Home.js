@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../context/context";
 import { formatDate, isCurrentWeek } from "../utils/formatDate";
 import { NFTStorage, File, Blob } from "nft.storage";
+import { abi } from "../web3/abi";
+import { useContract, useSigner } from "wagmi";
 
 function HomeComponent() {
   const store = useContext(Context);
@@ -13,10 +15,17 @@ function HomeComponent() {
   const [chain, setChain] = useState("ethereum");
   const [createPostLoading, setCreatePostLoading] = useState(false);
   const [mintNowLoading, setMintNowLoading] = useState(false);
+  const { data: signer } = useSigner();
   const inputRef = React.useRef(null);
   const viewRef = React.useRef(null);
   const newUserRef = React.useRef(null);
   const createFormRef = React.useRef(null);
+
+  const contract = useContract({
+    addressOrName: "0x730eB231156FAcae7CD387A4A42f041946bf2a63",
+    contractInterface: abi,
+    signerOrProvider: signer,
+  });
 
   const handleClick = (p) => {
     setSelectedPost(p);
@@ -65,7 +74,7 @@ function HomeComponent() {
     }
   }, [store.user.address]);
 
-  const mintNft = async (formData) => {
+  const mintNft = async (formData, storedPost) => {
     const client = new NFTStorage({
       token: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY,
     });
@@ -75,23 +84,30 @@ function HomeComponent() {
       type: "image/png",
     });
 
-    await client
+    const res = await client
       .store({
         name: formData.get("title"),
         description: formData.get("description"),
         image: imageFile,
       })
-      .then((metadata) => {
+      .then(async (metadata) => {
         console.log(metadata);
         console.log(chain);
         console.log(store.user.address);
         console.log(selectedImage);
+
+        await contract
+          .mint(store.user.address, storedPost.nft_id, metadata.url)
+          .then((res) => {
+            console.log("RESSS", res);
+          });
+
         // after mint logic
         minted = true;
         url = metadata.url; //replace this
+        return { minted, url };
       });
-
-    return { minted, url };
+    return res;
   };
 
   const mintNftNow = async () => {
@@ -112,11 +128,17 @@ function HomeComponent() {
               description: description,
               image: new Blob([imageBlob]),
             })
-            .then((metadata) => {
+            .then(async (metadata) => {
               console.log(metadata);
               console.log(chain);
               console.log(store.user.address);
               console.log(selectedImage);
+
+              await contract
+                .mint(user, selectedPost.nft_id, metadata.url)
+                .then((res) => {
+                  console.log("RESSS", res);
+                });
 
               // after mint logic
               minted = true;
@@ -162,28 +184,45 @@ function HomeComponent() {
     formData.append("image", selectedImage);
     formData.append("chain", chain);
 
-    mintNft(formData).then(async ({ minted, url }) => {
-      if (minted) {
-        formData.append("isMinted", true);
-        formData.append("nftLink", url);
-      }
-      for (var pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+    // store the post
+    await fetch("/api/post/create", {
+      method: "POST",
+      body: formData,
+    })
+      .then(async (storedPostRes) => {
+        const res = await storedPostRes.json();
+        const storedPost = res.post;
+        // mint the nft
+        mintNft(formData, storedPost).then(async ({ minted, url }) => {
+          // update the post with the nft metadata (if minted)
 
-      let response = await fetch("/api/post/create", {
-        method: "POST",
-        body: formData,
-      }).catch((e) => {
+          if (minted) {
+            let updateResponse = await fetch(
+              `/api/post/mint?postId=${storedPost._id}&nftLink=${url}&address=${store.user.address}`,
+              {
+                method: "get",
+              }
+            ).catch((e) => {
+              console.log(e);
+            });
+
+            let updateData = await updateResponse.text();
+            console.log("Stored and minted", updateData);
+          } else {
+            console.log("Only stored", storedPost);
+          }
+
+          getPosts();
+          inputRef.current.click();
+          setCreatePostLoading(false);
+        });
+      })
+      .catch((e) => {
         console.log(e);
       });
-
-      let data = await response.text();
-      console.log(data);
-      getPosts();
-      inputRef.current.click();
-      setCreatePostLoading(false);
-    });
   };
 
   return (

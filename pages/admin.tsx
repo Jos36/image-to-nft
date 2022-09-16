@@ -163,7 +163,7 @@ const Home: NextPage = ({ address, session }: AuthenticatedPageProps) => {
   };
 
   return (
-    <div className="h-fit pb-16 bg-white">
+    <div className="h-fit pb-16 bg-white min-h-screen">
       <div>
         <nav className="bg-p text-s text-lg font-semibold flex items-center p-5 justify-between shadow-md shadow-[#00000071]">
           <div className="ml-10">

@@ -22,7 +22,7 @@ function HomeComponent() {
   const createFormRef = React.useRef(null);
 
   const contract = useContract({
-    addressOrName: "0x730eB231156FAcae7CD387A4A42f041946bf2a63",
+    addressOrName: "0x2d84Db76a6E3c17C47AA7d0f2c0237dbdF6d4f52",
     contractInterface: abi,
     signerOrProvider: signer,
   });

@@ -24,7 +24,7 @@ const apiRoute = nextConnect({
   },
 });
 
-apiRoute.use(multer({ limits: { fileSize: 1048576 } }).any());
+apiRoute.use(multer().any());
 
 apiRoute.post(async (req, res) => {
   console.log(req.files[0]); // Your files here

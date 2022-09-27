@@ -137,7 +137,7 @@ function HomeComponent() {
               await contract
                 .mint(user, selectedPost.nft_id, metadata.url)
                 .then((res) => {
-                  console.log("RESSS", res);
+                  console.log("RESPONSE: ", res);
                 });
 
               // after mint logic

@@ -49,9 +49,10 @@ function Login({ address }: AuthenticatedPageProps) {
 
   return (
     <div className="h-screen bg-white flex justify-center items-center">
-      <div className="bg-black w-96 h-96 flex justify-center items-center  shadow-xl rounded-xl">
+      <div className="bg-black w-96 h-[32rem] flex justify-center items-center  shadow-xl rounded-xl">
         <div className=" flex flex-col gap-y-20  justify-center items-center">
-          <p className="text-xl font-semibold text-white">
+          <p className="text-xl font-semibold text-white flex flex-col items-center">
+            <img src="/icon.png" alt="" />
             Please login to countinue
           </p>
           <ConnectButton />

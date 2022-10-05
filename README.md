@@ -1,5 +1,8 @@
 This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](https://github.com/rainbow-me/rainbowkit/tree/main/packages/create-rainbowkit).
 
+## App idea
+The app is working as a nft gallery, you can post images and save/mint them as nfts, also there is a ranking system where admin users can rank/delete posts
+
 ## Getting Started
 
 First, run the development server:
